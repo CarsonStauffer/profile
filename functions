@@ -1,0 +1,32 @@
+# kill processes with substring in name
+kps() { (ps -e  | grep $1 | grep -v "grep" | awk '{print "killing process " $1 " " $4}');
+	kill $(ps -e  | grep $1 | grep -v "grep" | awk '{print $1}');}
+
+findname () { find . -type f \( -name '' -or -name "$@" \); }
+
+# lists all my.cnf files used by mysql
+mycnfs() {
+  local cnfs=($(mysqld --verbose --help 2> /dev/null | grep '/my.cnf'))
+  for cnf in ${cnfs[@]}; do
+    ls -la "${cnf/#\~/$HOME}"
+  done
+}
+
+# Runs tests for rails projects, using the appropriate commands for rspec, minitest, etc
+t() {
+  if [ -f 'mix.exs' ]; then # ExUnit
+    time MIX_ENV='test' mix test "$@"
+  else
+    if [ $(find spec -type f -name '*_spec.rb' 2> /dev/null) ]; then # Rspec
+      local cmd="rspec --color $@"
+    elif [ -d 'test' ]; then # Minitest
+      if [ -z "$@" ]; then # no args
+        local cmd='rake test'
+      else
+        local cmd="ruby -Ilib:test $@"
+      fi
+    fi
+    [ -z "${cmd}" ] && printf 'no tests found' && return 1
+    time LOGGER_LEVEL='debug' RAILS_ENV='test' bundle exec "${cmd}"
+  fi
+}

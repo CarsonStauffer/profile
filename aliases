@@ -1,0 +1,26 @@
+# bash
+alias c='cd ~/code && echo "Working directory changed to $PWD"'
+alias ll='ls -l'
+alias lal='ls -al'
+
+# rails
+alias be='bundle exec'
+alias rs='bundle exec rails server'
+alias rsp='bundle exec rails server -p'
+
+# mysql
+alias mysqlroot='mysql -u root -proot -h 127.0.0.1' # login as 'root'
+alias mysqldata='cd $(mysql -e "select @@datadir" | grep mysql) && echo "Working directory changed to $PWD"'
+
+# git
+alias gs='printf "\n\n" && git status'
+alias gb='git branch'
+alias gcm='git checkout master'
+
+# mouse
+alias mouse_acceleration_off='defaults write .GlobalPreferences com.apple.mouse.scaling -1 && echo "Mouse acceleration disabled. You must log out for this change to take effect"'
+alias mouse_acceleration_on='defaults write .GlobalPreferences com.apple.mouse.scaling 1 && echo "Mouse acceleration enabled. You must log out for this change to take effect"'
+
+# redis
+alias redisstart='sudo launchctl start io.redis.redis-server'
+alias redisstop='sudo launchctl stop io.redis.redis-server'
